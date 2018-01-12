@@ -3,9 +3,17 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore, QtGui, QtWidgets
+from datetime import datetime
+import threading
 
 API_key = "10d4923cb75c31bfa0a786005f4803db" #openweathermap API
 owm = OWM(API_key)
+
+datetime.today()
+datetime.today().year
+datetime.today().month
+datetime.today().day
+datetime.today().hour
 
 class MyWindow(QMainWindow):
     
@@ -50,6 +58,17 @@ class MyWindow(QMainWindow):
         btn1.setStyleSheet('QPushButton {background-color: white}')
         btn1.move(105, 280)
         btn1.clicked.connect(self.btn1_clicked)
+
+        self.clock = QLabel("",self)
+        self.clock.move(140,320)
+        self.clock.resize(200, 20)
+        self.Time()
+        
+    def Time(self):
+        self.clock.setText(datetime.today().strftime("%Y/%m/%d %H:%M:%S"))
+        threading.Timer(1,self.Time).start()
+       
+            
         
 
     def btn1_clicked(self):
@@ -145,7 +164,7 @@ class MyWindow(QMainWindow):
             self.label.move(75, 70) # QLabel 위치 설정
             self.label.resize(150, 150) # QLabel 크기 설정
 
-            self.image.setText('지역을 정확하게 입력해주세요.')
+            self.image.setText('지역명이 틀렸습니다.')
             pixmap = QPixmap('물음표.png')
             self.label.setPixmap(pixmap)
             
