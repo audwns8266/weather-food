@@ -7,7 +7,9 @@ from datetime import datetime
 import threading
 import openpyxl
 import random
+import webbrowser
 
+search = ''
 API_key = "10d4923cb75c31bfa0a786005f4803db" #openweathermap API
 owm = OWM(API_key)
 
@@ -20,10 +22,8 @@ datetime.today().hour
 wb = openpyxl.load_workbook('음식.xlsx') #엑셀 파일 읽기
 ws = wb.active # ws = wb.get_sheet_by_name("Sheet1")
 
-
-
 class MyWindow(QMainWindow):
-    
+
     def __init__(self):
         super().__init__()
       
@@ -63,13 +63,18 @@ class MyWindow(QMainWindow):
 
         btn1 = QPushButton("추천 메뉴", self) # 버튼 생성
         btn1.setStyleSheet('QPushButton {background-color: white}')
-        btn1.move(105, 280)
+        btn1.move(40, 280)
         btn1.clicked.connect(self.btn1_clicked)
 
         self.clock = QLabel("",self) # 시간 Label 생성
         self.clock.move(140,320)
         self.clock.resize(200, 20)
         self.Time()
+
+        btn2 = QPushButton("음식점 검색", self) # 버튼 생성
+        btn2.setStyleSheet('QPushButton {background-color: white}')
+        btn2.move(160, 280)
+        btn2.clicked.connect(self.btn2_clicked)
         
     def Time(self):
         self.clock.setText(datetime.today().strftime("%Y/%m/%d %H:%M:%S"))
@@ -104,6 +109,10 @@ class MyWindow(QMainWindow):
         Haze_B = Mist_B # Haze와 Mist 모두 안개
         Haze_R = Mist_R
         Haze_D = Mist_D
+
+        Fog_B = Mist_B # Haze와 Mist 모두 안개
+        Fog_R = Mist_R
+        Fog_D = Mist_D
         
         try :
             city = str(self.lineEdit.text()) # city에 lineEdit에 써진 텍스트 입력 
@@ -113,44 +122,43 @@ class MyWindow(QMainWindow):
             
 
             if w.get_status() == 'Snow' and datetime.today().strftime("%H")<str(12): # 눈오는날 아침
-                    Snow_B = random.choice(Snow_B)
-                    food = ws[Snow_B].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Snow_B = random.choice(Snow_B)
+                food = ws[Snow_B].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Snow' and datetime.today().strftime("%H")<str(18) and datetime.today().strftime("%H")>str(12): #눈오는날 점심
-                    Snow_R = random.choice(Snow_R)
-                    food = ws[Snow_R].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Snow_R = random.choice(Snow_R)
+                food = ws[Snow_R].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Snow' and datetime.today().strftime("%H")<str(24) and datetime.today().strftime("%H")>str(18): #눈오는날 저녁
-                    Snow_D = random.choice(Snow_D)
-                    food = ws[Snow_D].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Snow_D = random.choice(Snow_D)
+                food = ws[Snow_D].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             
             if w.get_status() == 'Rain'and datetime.today().strftime("%H")<str(12): #비오는날 아침
-                    Rain_B = random.choice(Rain_B)
-                    food = ws[Rain_B].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Rain_B = random.choice(Rain_B)
+                food = ws[Rain_B].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Rain'and datetime.today().strftime("%H")<str(18) and datetime.today().strftime("%H")>str(12): #비오는날 점심
-                    Rain_R = random.choice(Rain_R)
-                    food = ws[Rain_R].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Rain_R = random.choice(Rain_R)
+                food = ws[Rain_R].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Rain'and datetime.today().strftime("%H")<str(24) and datetime.today().strftime("%H")>str(18): #비오는날 저녁
-                    Rain_D = random.choice(Rain_D)
-                    food = ws[Rain_D].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Rain_D = random.choice(Rain_D)
+                food = ws[Rain_D].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
         
-             
             if w.get_status() == 'Clear'and datetime.today().strftime("%H")<str(12): # 맑은날 아침
                 Clear_B = random.choice(Clear_B)
                 food = ws[Clear_B].value
@@ -176,17 +184,17 @@ class MyWindow(QMainWindow):
                 pixmap = QPixmap('아이콘.png')
                 self.label.setPixmap(pixmap)
             if w.get_status() == 'Clouds'and datetime.today().strftime("%H")<str(18) and datetime.today().strftime("%H")>str(12): #흐린날 점심
-                    Clouds_R = random.choice(Clouds_R)
-                    food = ws[Clouds_R].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Clouds_R = random.choice(Clouds_R)
+                food = ws[Clouds_R].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Clouds'and datetime.today().strftime("%H")<str(24) and datetime.today().strftime("%H")>str(18): #흐린날 저녁
-                    Clouds_D = random.choice(Clouds_D)
-                    food = ws[Clouds_D].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Clouds_D = random.choice(Clouds_D)
+                food = ws[Clouds_D].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
 
             if w.get_status() == 'Mist' and datetime.today().strftime("%H")<str(12): #안개낀날 아침
                 Mist_B = random.choice(Mist_B)
@@ -206,7 +214,6 @@ class MyWindow(QMainWindow):
                 self.image.setText(food)
                 pixmap = QPixmap('아이콘.png')
                 self.label.setPixmap(pixmap)
-                
 
             if w.get_status() == 'Haze' and datetime.today().strftime("%H")<str(12): #안개낀날 아침
                 Haze_B = random.choice(Haze_B)
@@ -215,26 +222,49 @@ class MyWindow(QMainWindow):
                 pixmap = QPixmap('아이콘.png')
                 self.label.setPixmap(pixmap)
             if w.get_status() == 'Haze' and datetime.today().strftime("%H")<str(18) and datetime.today().strftime("%H")>str(12): #안개낀날 점심
-                    Haze_R = random.choice(Haze_R)
-                    food = ws[Haze_R].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Haze_R = random.choice(Haze_R)
+                food = ws[Haze_R].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
             if w.get_status() == 'Haze' and datetime.today().strftime("%H")<str(24) and datetime.today().strftime("%H")>str(18): #안개낀날 저녁
-                    Haze_D = random.choice(Haze_D)
-                    food = ws[Haze_D].value
-                    self.image.setText(food)
-                    pixmap = QPixmap('아이콘.png')
-                    self.label.setPixmap(pixmap)
+                Haze_D = random.choice(Haze_D)
+                food = ws[Haze_D].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
 
-                
+            if w.get_status() == 'Fog' and datetime.today().strftime("%H")<str(12): #안개낀날 아침
+                Fog_B = random.choice(Fog_B)
+                food = ws[Fog_B].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
+            if w.get_status() == 'Fog' and datetime.today().strftime("%H")<str(18) and datetime.today().strftime("%H")>str(12): #안개낀날 점심
+                Fog_R = random.choice(Fog_R)
+                food = ws[Fog_R].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
+            if w.get_status() == 'Fog' and datetime.today().strftime("%H")<str(24) and datetime.today().strftime("%H")>str(18): #안개낀날 저녁
+                Fog_D = random.choice(Fog_D)
+                food = ws[Fog_D].value
+                self.image.setText(food)
+                pixmap = QPixmap('아이콘.png')
+                self.label.setPixmap(pixmap)
                     
         except: # 오류 발생시 처리 
             print('순서 오류')
             self.image.setText("지역을 입력해 주세요.")
             pixmap = QPixmap('Question.png')
             self.label.setPixmap(pixmap)
+            
+        global search
+        search = food
         
+    def btn2_clicked(self):
+        url = "https://www.google.co.kr/maps/search/" + search
+        webbrowser.open(url)
         
     def lineEditPressed(self): #lineEditPressed 선언
         self.label.move(60, 20) # QLabel 위치 설정
@@ -276,6 +306,10 @@ class MyWindow(QMainWindow):
             if w.get_status() == 'Haze': # 안개낀 날씨면 안개 그림 출력
                 pixmap = QPixmap('Mist.png')
                 self.image.setPixmap(pixmap)
+
+            if w.get_status() == 'Fog': # 안개낀 날씨면 안개 그림 출력
+                pixmap = QPixmap('Mist.png')
+                self.image.setPixmap(pixmap)
             
         except: #오류 발생시 처리
             print('지역명 오류')
@@ -296,3 +330,4 @@ if __name__ == "__main__": # 창 출력
     mywindow = MyWindow()
     mywindow.show()
     app.exec_()
+
