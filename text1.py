@@ -9,7 +9,6 @@ import openpyxl
 import random
 import webbrowser
 
-search = ''
 API_key = "10d4923cb75c31bfa0a786005f4803db" #openweathermap API
 owm = OWM(API_key)
 
@@ -263,8 +262,22 @@ class MyWindow(QMainWindow):
         search = food
         
     def btn2_clicked(self):
-        url = "https://www.google.co.kr/maps/search/" + search
-        webbrowser.open(url)
+
+        try :
+            url = "https://www.google.co.kr/maps/search/" + search
+            webbrowser.open(url)
+
+        except: #오류 발생시 처리
+            print('search 오류')
+            self.image.move(35, 200) # QLabel 위치 설정
+            self.image.resize(240, 100) # QLabel 크기 설정
+        
+            self.label.move(75, 70) # QLabel 위치 설정
+            self.label.resize(150, 150) # QLabel 크기 설정
+
+            self.image.setText('추천메뉴를 먼저 검색해주세요.')
+            pixmap = QPixmap('Question.png')
+            self.label.setPixmap(pixmap)
         
     def lineEditPressed(self): #lineEditPressed 선언
         self.label.move(60, 20) # QLabel 위치 설정
