@@ -251,18 +251,57 @@ class MyWindow(QMainWindow):
                 self.image.setText(food)
                 pixmap = QPixmap('아이콘.png')
                 self.label.setPixmap(pixmap)
-                    
+                
+            global search #search를 전역변수로 선언하고 search에 음식이름을 넣어줌, 그후 음식 이름 별로 분류
+            search = food
+            if search == "도넛" or search == "바게뜨" or search == "토스트" or search == "베이글" or search == "모닝빵" or search == "샌드위치" or search == "머핀" or search == "파이":
+                search = "베이커리"
+            if search == "동지죽" or search == "호박죽":
+                search = "죽"
+            if search == "유부초밥" or search == "롤" or search == "초밥" :
+                search = "초밥"
+            if search == "떡튀순" or search == "어묵":
+                search = "분식"
+            if search == "돼지주물럭" or search == "제육볶음" or search == "오삼불고기":
+                search = "백반"
+            if search == "돌솥비빔밥":
+                search = "비빔밥"
+            if search == "닭강정" or search == "치킨&맥주":
+                search = "치킨"
+            if search == "짬뽕" or search == "짜장" or search == "칠리새우" or search == "깐풍기" or search == "쟁반짜장" or search == "탕수육":
+                search = "중국집"
+            if search == "갈매기살" or search == "삼겹살":
+                search = "고기"
+            if search == "쭈꾸미철판볶음":
+                search = "쭈꾸미"
+            if search == "낚지볶음":
+                search = "낚지"
+            if search == "족발&보쌈":
+                search = "족발"
+            if search == "고르곤졸라":
+                search = "레스토랑"
+            if search == "튀김&맥주":
+                search = "호프"
+            if search == "김치찌개" or search == "된장찌개":
+                search = "찌개"
+            if search == "삶은달걀"or search == "오꼬노미야끼"or search == "과일" or search == "붕어빵" or search == "호떡" or search == "타코야끼" or search == "와플" or search == "핫도그" or search == "고구마" or search == "호빵" or search == "미역국" or search == "떡국" or search == "스프" or search == "약밥" or search == "씨리얼" or search == "에그스크램블&베이컨" or search == "주먹밥" or search == "핫케익" or search == "견과류" or search == "과일주스" or search == "오믈렛" or search == "간장계란밥" or search == "샐러드" or search == "볶음밥":
+                search = "마트"
+            if search == "홍합탕":
+                search = "홍합"
+            if search == "막걸리&전":
+                search = "막걸리"
+                
         except: # 오류 발생시 처리 
             print('순서 오류')
             self.image.setText("지역을 입력해 주세요.")
             pixmap = QPixmap('Question.png')
             self.label.setPixmap(pixmap)
             
-        global search
-        search = food
+        
+      
         
     def btn2_clicked(self):
-
+        
         try :
             url = "https://www.google.co.kr/maps/search/" + search
             webbrowser.open(url)
